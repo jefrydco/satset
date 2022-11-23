@@ -47,7 +47,7 @@ export class Lighthouse extends ConsoleLogger {
         ...score,
         jobId: job.id,
       });
-      this.createdScores.push(await createdScore.save());
+      return createdScore.save();
     } catch (error) {
       this.error(error);
     }
@@ -57,19 +57,25 @@ export class Lighthouse extends ConsoleLogger {
   })
   async measure(job: Job<MeasureDto>) {
     this.log(`${this.measure.name} ${FunctionExecutionStateEnum.START}`);
-    if (this.browserService.browser) {
-      await this.runLighthouse(job);
-    } else {
-      await this.browserService.initBrowser();
-      await this.runLighthouse(job);
-    }
-    if (job.data.index + 1 === job.data.count) {
-      const createdMeasure = new this.measureModel({
-        name: job.data.name,
-        scores: this.createdScores,
-      });
-      this.log(await createdMeasure.save());
-      await this.browserService.browser.close();
+    try {
+      const measureDocument = await this.measureModel.findById(
+        job.data.measureMongoId,
+      );
+      if (this.browserService.browser) {
+        const score = await this.runLighthouse(job);
+        measureDocument?.set('scores', [...measureDocument.scores, score]);
+        measureDocument?.save();
+      } else {
+        await this.browserService.initBrowser();
+        const score = await this.runLighthouse(job);
+        measureDocument?.set('scores', [...measureDocument.scores, score]);
+        measureDocument?.save();
+      }
+      if (job.data.index + 1 === job.data.count) {
+        await this.browserService.browser.close();
+      }
+    } catch (error) {
+      this.error(error);
     }
     this.log(`${this.measure.name} ${FunctionExecutionStateEnum.END}`);
   }

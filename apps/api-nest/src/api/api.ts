@@ -20,7 +20,11 @@ export class Api extends ConsoleLogger {
   @Process({ name: ApiJobNameEnum.RUN, concurrency: WORKER_CONCURRENCY })
   async consumerRun(job: Job<PublishRunPayloadDto>) {
     this.log(`${this.consumerRun.name} ${FunctionExecutionStateEnum.START}`);
-    await this.browserQueue.add(BrowserJobName.LOGIN, job.data);
+    try {
+      await this.browserQueue.add(BrowserJobName.LOGIN, job.data);
+    } catch (error) {
+      this.error(error);
+    }
     this.log(`${this.consumerRun.name} ${FunctionExecutionStateEnum.END}`);
   }
 

@@ -1,16 +1,25 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { LighthouseController } from './lighthouse.controller';
-import { LighthouseService } from './lighthouse.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { QueueNameEnum } from 'src/app.enum';
+import { BrowserModule } from 'src/browser/browser.module';
 import { Lighthouse } from './lighthouse';
+import {
+  Measure,
+  MeasureSchema,
+  Score,
+  ScoreSchema,
+} from './lighthouse.schema';
 
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'lighthouse',
+      name: QueueNameEnum.LIGHTHOUSE,
     }),
+    MongooseModule.forFeature([{ name: Measure.name, schema: MeasureSchema }]),
+    MongooseModule.forFeature([{ name: Score.name, schema: ScoreSchema }]),
+    BrowserModule,
   ],
-  controllers: [LighthouseController],
-  providers: [LighthouseService, Lighthouse],
+  providers: [Lighthouse],
 })
 export class LighthouseModule {}

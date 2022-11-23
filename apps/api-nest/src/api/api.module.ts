@@ -4,6 +4,8 @@ import { ApiController } from './api.controller';
 import { ApiService } from './api.service';
 import { Api } from './api';
 import { QueueNameEnum } from 'src/app.enum';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Measure, MeasureSchema } from 'src/lighthouse/lighthouse.schema';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { QueueNameEnum } from 'src/app.enum';
     BullModule.registerQueue({
       name: QueueNameEnum.LIGHTHOUSE,
     }),
+    MongooseModule.forFeature([{ name: Measure.name, schema: MeasureSchema }]),
   ],
   controllers: [ApiController],
   providers: [ApiService, Api],

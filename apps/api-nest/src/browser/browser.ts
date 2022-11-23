@@ -10,7 +10,8 @@ import { PUPPETEER_PORT, WORKER_CONCURRENCY } from 'src/app.constant';
 import { FunctionExecutionStateEnum, QueueNameEnum } from 'src/app.enum';
 import { MeasureDto } from 'src/lighthouse/lighthouse.dto';
 import { LighthouseJobNameEnum } from 'src/lighthouse/lighthouse.enum';
-import { Measure } from 'src/lighthouse/lighthouse.schema';
+import { Measure, MeasureProgressEnum } from 'src/lighthouse/lighthouse.schema';
+import { LoginDto } from './browser.dto';
 import { BrowserJobName } from './browser.enum';
 
 @Injectable()
@@ -33,39 +34,41 @@ export class Browser extends ConsoleLogger {
     });
   }
   @Process({ name: BrowserJobName.LOGIN, concurrency: WORKER_CONCURRENCY })
-  async consumerLogin(job: Job<PublishRunPayloadDto>) {
+  async consumerLogin(job: Job<LoginDto>) {
     this.log(`${this.consumerLogin.name} ${FunctionExecutionStateEnum.START}`);
     try {
-      const createdMeasure = new this.measureModel({
-        name: job.data.name,
-        scores: [],
-      });
-      this.log(await createdMeasure.save());
-      await this.initBrowser();
-      const page = await this.browser.newPage();
-      await page.goto(job.data.loginUrl);
-      const emailInput = await page.$(job.data.usernameSelector);
-      await emailInput?.type(job.data.username);
-      const passwordInput = await page.$(job.data.passwordSelector);
-      await passwordInput?.type(job.data.password);
-      const submitButton = await page.$(job.data.submitSelector);
-      await submitButton?.click();
-      await page.waitForNavigation({ waitUntil: 'networkidle0' });
-      if (job.data.hasPin) {
-        const pinInput = await page.$(job.data.pinSelector);
-        pinInput?.type(job.data.pin);
-      }
-      await page.waitForNavigation({ waitUntil: 'networkidle0' });
-      await page.close();
-      await Promise.allSettled(
-        Array.from({ length: job.data.count }, (_, k) =>
-          this.lighthouseQueue.add(LighthouseJobNameEnum.MEASURE, {
-            ...job.data,
-            index: k,
-            measureMongoId: createdMeasure.id,
-          }),
-        ),
+      const measureDocument = await this.measureModel.findById(
+        job.data.measureMongoId,
       );
+      if (measureDocument) {
+        measureDocument.set('progress', MeasureProgressEnum.IN_PROGRESS);
+        await measureDocument.save();
+
+        await this.initBrowser();
+        const page = await this.browser.newPage();
+        await page.goto(job.data.loginUrl);
+        const emailInput = await page.$(job.data.usernameSelector);
+        await emailInput?.type(job.data.username);
+        const passwordInput = await page.$(job.data.passwordSelector);
+        await passwordInput?.type(job.data.password);
+        const submitButton = await page.$(job.data.submitSelector);
+        await submitButton?.click();
+        await page.waitForNavigation({ waitUntil: 'networkidle0' });
+        if (job.data.hasPin) {
+          const pinInput = await page.$(job.data.pinSelector);
+          pinInput?.type(job.data.pin);
+        }
+        await page.waitForNavigation({ waitUntil: 'networkidle0' });
+        await page.close();
+        await Promise.allSettled(
+          Array.from({ length: job.data.count }, (_, k) =>
+            this.lighthouseQueue.add(LighthouseJobNameEnum.MEASURE, {
+              ...job.data,
+              index: k,
+            }),
+          ),
+        );
+      }
     } catch (error) {
       this.error(error);
     }

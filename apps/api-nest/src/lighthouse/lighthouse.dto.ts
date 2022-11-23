@@ -1,12 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { PublishRunPayloadDto } from 'src/api/api.dto';
+import { IsNotEmpty, IsNumber } from 'class-validator';
+import { LoginDto } from 'src/browser/browser.dto';
 
-export class MeasureDto extends PublishRunPayloadDto {
+export class MeasureDto extends LoginDto {
   @IsNotEmpty()
   @IsNumber()
   index: number;
-
-  @IsNotEmpty()
-  @IsString()
-  measureMongoId: string;
 }

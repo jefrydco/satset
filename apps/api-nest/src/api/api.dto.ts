@@ -7,6 +7,12 @@ import {
   IsUrl,
 } from 'class-validator';
 
+export class RunStatusRequestPayloadDto {
+  @IsNotEmpty()
+  @IsString()
+  measureMongoId: string;
+}
+
 export class RunRequestPayloadDto {
   @IsNotEmpty()
   @IsString()
@@ -57,4 +63,8 @@ export class RunRequestPayloadDto {
   count: number;
 }
 
-export class PublishRunPayloadDto extends RunRequestPayloadDto {}
+export class PublishRunPayloadDto extends RunRequestPayloadDto {
+  @IsNotEmpty()
+  @IsString()
+  measureMongoId: string;
+}

@@ -55,8 +55,10 @@ export class Lighthouse extends ConsoleLogger {
   @Process({
     name: LighthouseJobNameEnum.MEASURE,
   })
-  async measure(job: Job<MeasureDto>) {
-    this.log(`${this.measure.name} ${FunctionExecutionStateEnum.START}`);
+  async consumerMeasure(job: Job<MeasureDto>) {
+    this.log(
+      `${this.consumerMeasure.name} ${FunctionExecutionStateEnum.START}`,
+    );
     try {
       const measureDocument = await this.measureModel.findById(
         job.data.measureMongoId,
@@ -77,6 +79,6 @@ export class Lighthouse extends ConsoleLogger {
     } catch (error) {
       this.error(error);
     }
-    this.log(`${this.measure.name} ${FunctionExecutionStateEnum.END}`);
+    this.log(`${this.consumerMeasure.name} ${FunctionExecutionStateEnum.END}`);
   }
 }

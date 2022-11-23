@@ -1,6 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
+export enum MeasureProgressEnum {
+  INIT = 'INIT',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+}
+
 @Schema()
 export class Score {
   @Prop()
@@ -30,6 +36,16 @@ export const ScoreSchema = SchemaFactory.createForClass(Score);
 export class Measure {
   @Prop()
   name: string;
+
+  @Prop()
+  runJobId: string;
+
+  @Prop({
+    type: String,
+    default: MeasureProgressEnum.INIT,
+    enum: Object.values(MeasureProgressEnum),
+  })
+  progress: MeasureProgressEnum;
 
   @Prop({
     type: [{ type: MongooseSchema.Types.ObjectId, ref: Score.name }],

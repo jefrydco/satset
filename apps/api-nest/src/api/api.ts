@@ -6,13 +6,14 @@ import { ApiJobNameEnum } from './api.enum';
 import { PublishRunPayloadDto } from './api.dto';
 import { BrowserJobName } from 'src/browser/browser.enum';
 import { WORKER_CONCURRENCY } from 'src/app.constant';
+import { LoginDto } from 'src/browser/browser.dto';
 
 @Injectable()
 @Processor(QueueNameEnum.API)
 export class Api extends ConsoleLogger {
   constructor(
     @InjectQueue(QueueNameEnum.BROWSER)
-    private browserQueue: Queue<PublishRunPayloadDto>,
+    private browserQueue: Queue<LoginDto>,
   ) {
     super(Api.name);
   }

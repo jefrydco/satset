@@ -13,6 +13,6 @@ async function bootstrap() {
   );
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3001, '0.0.0.0');
 }
 bootstrap();

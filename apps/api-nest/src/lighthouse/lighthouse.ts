@@ -41,7 +41,7 @@ export class Lighthouse extends ConsoleLogger {
         desktopConfig,
       );
       await writeFile(
-        `json/${job.data.name}-${job.data.index}-${job.id}-${job.data.measureMongoId}.json`,
+        `json/${job.data.name}-${job.id}-${job.data.index}-${job.data.measureMongoId}.json`,
         lhr,
         { spaces: 2 },
       );

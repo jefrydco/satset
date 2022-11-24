@@ -2,6 +2,10 @@
   "name": "satset",
   "version": "0.0.1",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean",
@@ -12,11 +16,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "eslint-config-custom": "*",
+    "eslint-config-custom": "workspace:*",
     "prettier": "latest",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@7.16.1",
+  "packageManager": "pnpm@7.17.0",
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"

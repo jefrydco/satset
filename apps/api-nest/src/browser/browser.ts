@@ -4,8 +4,7 @@ import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job, Queue } from 'bull';
 import { Model } from 'mongoose';
-import puppeteer from 'puppeteer';
-import { PublishRunPayloadDto } from 'src/api/api.dto';
+import puppeteer, { Browser as PuppeteerBrowser } from 'puppeteer';
 import { PUPPETEER_PORT, WORKER_CONCURRENCY } from 'src/app.constant';
 import { FunctionExecutionStateEnum, QueueNameEnum } from 'src/app.enum';
 import { MeasureDto } from 'src/lighthouse/lighthouse.dto';
@@ -17,7 +16,7 @@ import { BrowserJobName } from './browser.enum';
 @Injectable()
 @Processor(QueueNameEnum.BROWSER)
 export class Browser extends ConsoleLogger {
-  browser: puppeteer.Browser;
+  browser: PuppeteerBrowser;
   constructor(
     @InjectQueue(QueueNameEnum.LIGHTHOUSE)
     private lighthouseQueue: Queue<MeasureDto>,

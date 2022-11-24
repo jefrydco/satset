@@ -1,5 +1,15 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+
+const defaultSchemaOptions: SchemaOptions = {
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
+};
 
 export enum MeasureProgressEnum {
   INIT = 'INIT',
@@ -7,7 +17,7 @@ export enum MeasureProgressEnum {
   COMPLETED = 'COMPLETED',
 }
 
-@Schema()
+@Schema(defaultSchemaOptions)
 export class Score {
   @Prop()
   jobId: string;
@@ -32,7 +42,7 @@ export type ScoreDocument = HydratedDocument<Score>;
 
 export const ScoreSchema = SchemaFactory.createForClass(Score);
 
-@Schema()
+@Schema(defaultSchemaOptions)
 export class Measure {
   @Prop()
   name: string;

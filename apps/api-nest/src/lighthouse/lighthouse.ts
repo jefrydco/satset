@@ -3,6 +3,7 @@ import { Processor } from '@nestjs/bull';
 import { ConsoleLogger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job } from 'bull';
+import { writeJson } from 'fs-extra';
 import { Model } from 'mongoose';
 import camelCase from 'camelcase';
 import { PUPPETEER_PORT } from 'src/app.constant';
@@ -10,11 +11,15 @@ import { FunctionExecutionStateEnum, QueueNameEnum } from 'src/app.enum';
 import { Browser } from 'src/browser/browser';
 import { MeasureDto } from './lighthouse.dto';
 import { LighthouseJobNameEnum } from './lighthouse.enum';
-import { Measure, Score, ScoreDocument } from './lighthouse.schema';
+import {
+  Measure,
+  MeasureProgressEnum,
+  Score,
+  ScoreDocument,
+} from './lighthouse.schema';
 
 @Processor(QueueNameEnum.LIGHTHOUSE)
 export class Lighthouse extends ConsoleLogger {
-  private createdScores: ScoreDocument[] = [];
   constructor(
     @InjectModel(Measure.name) private measureModel: Model<Measure>,
     @InjectModel(Score.name) private scoreModel: Model<Score>,
@@ -34,6 +39,11 @@ export class Lighthouse extends ConsoleLogger {
           output: ['json'],
         },
         desktopConfig,
+      );
+      await writeJson(
+        `${job.data.name}-${job.data.index}-${job.data.measureMongoId}.json`,
+        lhr,
+        { spaces: 2 },
       );
       const score = Object.fromEntries(
         Object.entries(lhr.categories).map(([key, value]) => [
@@ -60,20 +70,28 @@ export class Lighthouse extends ConsoleLogger {
       `${this.consumerMeasure.name} ${FunctionExecutionStateEnum.START}`,
     );
     try {
-      const measureDocument = await this.measureModel.findById(
-        job.data.measureMongoId,
-      );
       if (this.browserService.browser) {
+        const measureDocument = await this.measureModel.findById(
+          job.data.measureMongoId,
+        );
         const score = await this.runLighthouse(job);
         measureDocument?.set('scores', [...measureDocument.scores, score]);
-        measureDocument?.save();
+        await measureDocument?.save();
       } else {
         await this.browserService.initBrowser();
+        const measureDocument = await this.measureModel.findById(
+          job.data.measureMongoId,
+        );
         const score = await this.runLighthouse(job);
         measureDocument?.set('scores', [...measureDocument.scores, score]);
-        measureDocument?.save();
+        await measureDocument?.save();
       }
       if (job.data.index + 1 === job.data.count) {
+        const measureDocument = await this.measureModel.findById(
+          job.data.measureMongoId,
+        );
+        measureDocument?.set('progress', MeasureProgressEnum.COMPLETED);
+        await measureDocument?.save();
         await this.browserService.browser.close();
       }
     } catch (error) {

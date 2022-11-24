@@ -24,9 +24,9 @@ export class ApiService extends ConsoleLogger {
   async getMeasure(runStatusRequestPayloadDto: RunStatusRequestPayloadDto) {
     try {
       this.log(`${this.getMeasure.name} ${FunctionExecutionStateEnum.START}`);
-      const measureDocument = await this.measureModel.findById(
-        runStatusRequestPayloadDto.measureMongoId,
-      );
+      const measureDocument = await this.measureModel
+        .findById(runStatusRequestPayloadDto.measureMongoId)
+        .populate('scores');
       return measureDocument?.toJSON();
     } catch (error) {
       this.error(error);

@@ -3,7 +3,7 @@ import { Processor } from '@nestjs/bull';
 import { ConsoleLogger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Job } from 'bull';
-import { writeJson } from 'fs-extra';
+import { writeFile } from 'jsonfile';
 import { Model } from 'mongoose';
 import camelCase from 'camelcase';
 import { PUPPETEER_PORT } from 'src/app.constant';
@@ -40,8 +40,8 @@ export class Lighthouse extends ConsoleLogger {
         },
         desktopConfig,
       );
-      await writeJson(
-        `${job.data.name}-${job.data.index}-${job.data.measureMongoId}.json`,
+      await writeFile(
+        `json/${job.data.name}-${job.data.index}-${job.id}-${job.data.measureMongoId}.json`,
         lhr,
         { spaces: 2 },
       );

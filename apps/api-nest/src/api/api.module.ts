@@ -5,7 +5,12 @@ import { ApiService } from './api.service';
 import { Api } from './api';
 import { QueueNameEnum } from 'src/app.enum';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Measure, MeasureSchema } from 'src/lighthouse/lighthouse.schema';
+import {
+  Measure,
+  MeasureSchema,
+  Score,
+  ScoreSchema,
+} from 'src/lighthouse/lighthouse.schema';
 
 @Module({
   imports: [
@@ -19,6 +24,7 @@ import { Measure, MeasureSchema } from 'src/lighthouse/lighthouse.schema';
       name: QueueNameEnum.LIGHTHOUSE,
     }),
     MongooseModule.forFeature([{ name: Measure.name, schema: MeasureSchema }]),
+    MongooseModule.forFeature([{ name: Score.name, schema: ScoreSchema }]),
   ],
   controllers: [ApiController],
   providers: [ApiService, Api],

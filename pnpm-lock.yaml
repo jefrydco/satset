@@ -112,6 +112,7 @@ importers:
       '@types/node': ^17.0.12
       '@types/react': ^18.0.25
       '@types/react-dom': ^18.0.9
+      chart.js: ^4.0.1
       dot-prop: ^7.2.0
       eslint: 7.32.0
       eslint-config-custom: workspace:*
@@ -119,6 +120,7 @@ importers:
       ky-universal: ^0.11.0
       next: latest
       react: ^18.2.0
+      react-chartjs-2: ^5.0.1
       react-dom: ^18.2.0
       tsconfig: workspace:*
       typescript: ^4.5.3
@@ -130,11 +132,13 @@ importers:
       '@mui/lab': 5.0.0-alpha.109_mfsgl7zcijvzr672pmcj5ne5y4
       '@mui/material': 5.10.15_thp4wrxo45nyllusrnt46mid4u
       '@tanstack/react-query': 4.16.1_biqbaboplfbrettd7655fr4n2y
+      chart.js: 4.0.1
       dot-prop: 7.2.0
       ky: 0.32.2
       ky-universal: 0.11.0_ky@0.32.2
       next: 13.0.5_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
+      react-chartjs-2: 5.0.1_mdhqntb7qznawtkbfweh7f2mzm
       react-dom: 18.2.0_react@18.2.0
       ui: link:../../packages/ui
     devDependencies:
@@ -3817,6 +3821,11 @@ packages:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
 
+  /chart.js/4.0.1:
+    resolution: {integrity: sha512-5/8/9eBivwBZK81mKvmIwTb2Pmw4D/5h1RK9fBWZLLZ8mCJ+kfYNmV9rMrGoa5Hgy2/wVDBMLSUDudul2/9ihA==}
+    engines: {pnpm: ^7.0.0}
+    dev: false
+
   /chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
@@ -7336,6 +7345,16 @@ packages:
       http-errors: 2.0.0
       iconv-lite: 0.4.24
       unpipe: 1.0.0
+
+  /react-chartjs-2/5.0.1_mdhqntb7qznawtkbfweh7f2mzm:
+    resolution: {integrity: sha512-u38C9OxynlNCBp+79grgXRs7DSJ9w8FuQ5/HO5FbYBbri8HSZW+9SWgjVshLkbXBfXnMGWakbHEtvN0nL2UG7Q==}
+    peerDependencies:
+      chart.js: ^4.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 4.0.1
+      react: 18.2.0
+    dev: false
 
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}

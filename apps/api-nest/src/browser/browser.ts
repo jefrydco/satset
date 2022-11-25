@@ -60,7 +60,7 @@ export class Browser extends ConsoleLogger {
         await page.waitForNavigation({ waitUntil: 'networkidle0' });
         await page.close();
         await Promise.allSettled(
-          Array.from({ length: job.data.count }, (_, k) =>
+          Array.from({ length: Number.parseInt(job.data.count, 10) }, (_, k) =>
             this.lighthouseQueue.add(LighthouseJobNameEnum.MEASURE, {
               ...job.data,
               index: k,

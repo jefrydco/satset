@@ -86,7 +86,7 @@ export class Lighthouse extends ConsoleLogger {
         measureDocument?.set('scores', [...measureDocument.scores, score]);
         await measureDocument?.save();
       }
-      if (job.data.index + 1 === job.data.count) {
+      if (job.data.index + 1 === Number.parseInt(job.data.count, 10)) {
         const measureDocument = await this.measureModel.findById(
           job.data.measureMongoId,
         );

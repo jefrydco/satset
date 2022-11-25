@@ -1,38 +1,64 @@
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
-  Button,
-  FilledInput,
   FormControl,
   FormControlLabel,
   IconButton,
-  Input,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Switch,
   TextField,
-  Tooltip,
+  Tooltip as MUITooltip,
 } from "@mui/material";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend
+);
+
+export const lineOptions = {
+  responsive: true,
+  interaction: {
+    mode: 'index'
+  },
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+  },
+};
 
 const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Head from "next/head";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import ky from "ky";
-import { IRunRequestPayload, IRunResponseData } from "../types";
+import {
+  IRunRequestPayload,
+  IRunResponseData,
+  IRunStatusProgressResponseDataEnum,
+  IRunStatusRequestPayload,
+  IRunStatusResponseData,
+} from "../types";
 
 const api = ky.create({ prefixUrl: `${API_HOST}/api/v1` });
 
@@ -49,8 +75,8 @@ export default function Home() {
       username: "jefrydco@gmail.com",
       password: "YourSecretP@ssw0rd",
       pin: "0000",
-      url: "https://invest.ajaib.co.id/#/saham/BBCA",
-      count: 3,
+      url: "https://invest.ajaib.co.id/#/saham/BBRI",
+      count: '3',
     });
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const {
@@ -62,9 +88,36 @@ export default function Home() {
       return api.post("run", { json: runPayload }).json<IRunResponseData>();
     },
   });
+  const {
+    mutate: runStatus,
+    data: runStatusResponseData,
+    isLoading: isRunStatusLoading,
+  } = useMutation({
+    mutationFn: (runStatusPayload: IRunStatusRequestPayload) => {
+      return api
+        .post("run/status", { json: runStatusPayload })
+        .json<IRunStatusResponseData>();
+    },
+  });
+  const intervalId = useRef<NodeJS.Timeout>()
   useEffect(() => {
-    console.log(runResponseData);
+    if (runResponseData) {
+      intervalId.current = setInterval(() => {
+        runStatus({ measureMongoId: runResponseData.measureMongoId });
+      }, 15000);
+    }
+    return () => {
+      clearInterval(intervalId.current)
+    }
   }, [runResponseData]);
+  useEffect(() => {
+    if (runStatusResponseData?.progress === IRunStatusProgressResponseDataEnum.COMPLETED) {
+      clearInterval(intervalId.current)
+    }
+  }, [runStatusResponseData])
+  useEffect(() => {
+    console.log(runStatusResponseData);
+  }, [runStatusResponseData]);
   const handleInputChange =
     (
       prop: keyof IRunRequestPayload,
@@ -142,7 +195,7 @@ export default function Home() {
                     label="Password"
                     endAdornment={
                       <InputAdornment position="end">
-                        <Tooltip
+                        <MUITooltip
                           title={
                             isPasswordVisible
                               ? "Hide Password"
@@ -167,7 +220,7 @@ export default function Home() {
                               <Visibility />
                             )}
                           </IconButton>
-                        </Tooltip>
+                        </MUITooltip>
                       </InputAdornment>
                     }
                     value={runRequestPayload.password}
@@ -238,7 +291,11 @@ export default function Home() {
               </Grid2>
             </Grid2>
           </Grid2>
-          <Grid2 lg={6}></Grid2>
+          <Grid2 lg={6}>
+            {runStatusResponseData ? (
+              <Line options={lineOptions} data={runStatusResponseData.chart} />
+            ) : undefined}
+          </Grid2>
         </Grid2>
       </Box>
     </>

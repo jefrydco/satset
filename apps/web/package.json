@@ -15,11 +15,13 @@
     "@mui/lab": "5.0.0-alpha.109",
     "@mui/material": "^5.10.15",
     "@tanstack/react-query": "^4.16.1",
+    "chart.js": "^4.0.1",
     "dot-prop": "^7.2.0",
     "ky": "^0.32.2",
     "ky-universal": "^0.11.0",
     "next": "latest",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.0.1",
     "react-dom": "^18.2.0",
     "ui": "workspace:*"
   },

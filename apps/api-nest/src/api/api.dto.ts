@@ -59,8 +59,8 @@ export class RunRequestPayloadDto {
   url: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  count: number;
+  @IsString()
+  count: string;
 }
 
 export class PublishRunPayloadDto extends RunRequestPayloadDto {

@@ -8,11 +8,31 @@ export interface IRunStatusResponseDataScore {
   id: string;
 }
 
+export interface IRunStatusResponseDataDataset {
+  label: string;
+  data: number[];
+  borderColor: string;
+  backgroundColor: string;
+}
+
+export interface IRunStatusResponseDataChart {
+  labels: string[];
+  datasets: IRunStatusResponseDataDataset[];
+}
+
+export enum IRunStatusProgressResponseDataEnum {
+  INIT = 'INIT',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED'
+}
+
 export interface IRunStatusResponseData {
+  exists: boolean;
   name: string;
-  progress: string;
+  progress: IRunStatusProgressResponseDataEnum;
   scores: IRunStatusResponseDataScore[];
   id: string;
+  chart: IRunStatusResponseDataChart;
 }
 
 export interface IRunRequestPayload {
@@ -27,7 +47,7 @@ export interface IRunRequestPayload {
   password: string;
   pin: string;
   url: string;
-  count: number;
+  count: string;
 }
 
 export interface IRunStatusRequestPayload {

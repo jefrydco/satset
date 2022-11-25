@@ -1,34 +1,20 @@
-# Turborepo Docker starter
+# SatSet
 
-This is an official Docker starter Turborepo.
+> Run lighthouse behind authentication
 
 ## What's inside?
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+It contains the following packages/apps:
 
 ### Apps and Packages
 
 - `web`: a [Next.js](https://nextjs.org/) app
-- `api`: an [Express](https://expressjs.com/) server
+- `api-next`: an [Nest.js](https://nestjs.com/) server
 - `ui`: ui: a React component library
 - `eslint-config-custom`: `eslint` configurations for client side applications (includes `eslint-config-next` and `eslint-config-prettier`)
-- `eslint-config-custom-server`: `eslint` configurations for server side applications (includes `eslint-config-next` and `eslint-config-prettier`)
-- `scripts`: Jest configurations
-- `logger`: Isomorphic logger (a small wrapper around console.log)
 - `tsconfig`: tsconfig.json;s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx degit vercel/turbo/examples/with-docker with-docker
-cd with-docker
-yarn install
-git init . && git add . && git commit -m "Init"
-```
 
 ### Docker
 

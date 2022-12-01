@@ -16,6 +16,12 @@ It contains the following packages/apps:
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
+### Commands
+
+```sh
+$ node api.js --name="test1" --loginUrl="https://login.ajaib.co.id/login" --usernameSelector="input[name='email']" --passwordSelector="input[name='password']" --submitSelector="button[type='submit']" --hasPin=true --pinSelector=".pincode-input-text" --username="jefrydco@gmail.com" --password="YourSecretP@ssw0rd" --pin="0000" --url="https://invest.ajaib.co.id/#/saham/BBRI" --count="1"
+```
+
 ### Docker
 
 This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:

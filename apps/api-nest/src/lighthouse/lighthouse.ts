@@ -11,12 +11,7 @@ import { FunctionExecutionStateEnum, QueueNameEnum } from 'src/app.enum';
 import { Browser } from 'src/browser/browser';
 import { MeasureDto } from './lighthouse.dto';
 import { LighthouseJobNameEnum } from './lighthouse.enum';
-import {
-  Measure,
-  MeasureProgressEnum,
-  Score,
-  ScoreDocument,
-} from './lighthouse.schema';
+import { Measure, MeasureProgressEnum, Score } from './lighthouse.schema';
 
 @Processor(QueueNameEnum.LIGHTHOUSE)
 export class Lighthouse extends ConsoleLogger {

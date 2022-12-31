@@ -17,9 +17,9 @@
   "devDependencies": {
     "boolean": "^3.2.0",
     "eslint-config-custom": "workspace:*",
-    "got": "11",
-    "prettier": "latest",
-    "turbo": "latest",
+    "got": "^12.5.3",
+    "prettier": "^2.8.1",
+    "turbo": "^1.6.3",
     "yargs": "^17.6.2"
   },
   "packageManager": "pnpm@7.17.0",

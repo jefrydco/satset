@@ -11,39 +11,6 @@ import {
   TextField,
   Tooltip as MUITooltip,
 } from "@mui/material";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend
-);
-
-export const lineOptions = {
-  responsive: true,
-  interaction: {
-    mode: 'index'
-  },
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-  },
-};
-
-const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 
 import Head from "next/head";
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -52,6 +19,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useEffect, useRef, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import ky from "ky";
+
 import {
   IRunRequestPayload,
   IRunResponseData,
@@ -59,7 +27,9 @@ import {
   IRunStatusRequestPayload,
   IRunStatusResponseData,
 } from "../types";
+import { Chart } from "../components/Chart/Chart";
 
+const API_HOST = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:3001";
 const api = ky.create({ prefixUrl: `${API_HOST}/api/v1` });
 
 export default function Home() {
@@ -76,7 +46,7 @@ export default function Home() {
       password: "YourSecretP@ssw0rd",
       pin: "0000",
       url: "https://invest.ajaib.co.id/#/saham/BBRI",
-      count: '3',
+      count: "3",
     });
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const {
@@ -99,24 +69,29 @@ export default function Home() {
         .json<IRunStatusResponseData>();
     },
   });
-  const intervalId = useRef<NodeJS.Timeout>()
+  const isLoading =
+    isRunLoading ||
+    runStatusResponseData?.progress ===
+      IRunStatusProgressResponseDataEnum.IN_PROGRESS;
+  const intervalId = useRef<NodeJS.Timeout>();
   useEffect(() => {
     if (runResponseData) {
+      runStatus({ measureMongoId: runResponseData.measureMongoId });
       intervalId.current = setInterval(() => {
         runStatus({ measureMongoId: runResponseData.measureMongoId });
       }, 15000);
     }
     return () => {
-      clearInterval(intervalId.current)
-    }
+      clearInterval(intervalId.current);
+    };
   }, [runResponseData]);
   useEffect(() => {
-    if (runStatusResponseData?.progress === IRunStatusProgressResponseDataEnum.COMPLETED) {
-      clearInterval(intervalId.current)
+    if (
+      runStatusResponseData?.progress ===
+      IRunStatusProgressResponseDataEnum.COMPLETED
+    ) {
+      clearInterval(intervalId.current);
     }
-  }, [runStatusResponseData])
-  useEffect(() => {
-    console.log(runStatusResponseData);
   }, [runStatusResponseData]);
   const handleInputChange =
     (
@@ -140,6 +115,7 @@ export default function Home() {
             <Grid2 container spacing={4}>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Name"
                   fullWidth
                   value={runRequestPayload.name}
@@ -148,6 +124,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Login URL"
                   fullWidth
                   value={runRequestPayload.loginUrl}
@@ -156,6 +133,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Username Selector"
                   fullWidth
                   value={runRequestPayload.usernameSelector}
@@ -164,6 +142,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Password Selector"
                   fullWidth
                   value={runRequestPayload.passwordSelector}
@@ -172,6 +151,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Submit Selector"
                   fullWidth
                   value={runRequestPayload.submitSelector}
@@ -180,6 +160,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Username"
                   fullWidth
                   value={runRequestPayload.username}
@@ -192,6 +173,7 @@ export default function Home() {
                   <OutlinedInput
                     id="password"
                     type={isPasswordVisible ? "text" : "password"}
+                    disabled={isLoading}
                     label="Password"
                     endAdornment={
                       <InputAdornment position="end">
@@ -232,6 +214,7 @@ export default function Home() {
                 <FormControlLabel
                   control={
                     <Switch
+                      disabled={isLoading}
                       defaultChecked
                       value={runRequestPayload.hasPin}
                       onChange={handleInputChange("hasPin", "checked")}
@@ -244,6 +227,7 @@ export default function Home() {
                 <>
                   <Grid2 lg={6}>
                     <TextField
+                      disabled={isLoading}
                       label="PIN Selector"
                       fullWidth
                       value={runRequestPayload.pinSelector}
@@ -252,6 +236,7 @@ export default function Home() {
                   </Grid2>
                   <Grid2 lg={6}>
                     <TextField
+                      disabled={isLoading}
                       label="PIN"
                       fullWidth
                       value={runRequestPayload.pin}
@@ -262,6 +247,7 @@ export default function Home() {
               ) : undefined}
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="URL"
                   fullWidth
                   value={runRequestPayload.url}
@@ -270,6 +256,7 @@ export default function Home() {
               </Grid2>
               <Grid2 lg={6}>
                 <TextField
+                  disabled={isLoading}
                   label="Count"
                   fullWidth
                   type={"number"}
@@ -281,7 +268,7 @@ export default function Home() {
                 <LoadingButton
                   fullWidth
                   variant="contained"
-                  loading={isRunLoading}
+                  loading={isLoading}
                   onClick={() => {
                     run(runRequestPayload);
                   }}
@@ -291,9 +278,33 @@ export default function Home() {
               </Grid2>
             </Grid2>
           </Grid2>
-          <Grid2 lg={6}>
+          <Grid2 lg={6} md={12} sm={12} xs={12}>
             {runStatusResponseData ? (
-              <Line options={lineOptions} data={runStatusResponseData.chart} />
+              <Chart
+                dataSource={runStatusResponseData.chart.dataset}
+                series={[
+                  {
+                    type: "line",
+                    seriesLayoutBy: "row",
+                  },
+                  {
+                    type: "line",
+                    seriesLayoutBy: "row",
+                  },
+                  {
+                    type: "line",
+                    seriesLayoutBy: "row",
+                  },
+                  {
+                    type: "line",
+                    seriesLayoutBy: "row",
+                  },
+                  {
+                    type: "line",
+                    seriesLayoutBy: "row",
+                  },
+                ]}
+              />
             ) : undefined}
           </Grid2>
         </Grid2>

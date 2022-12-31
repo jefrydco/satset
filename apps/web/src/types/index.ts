@@ -8,16 +8,8 @@ export interface IRunStatusResponseDataScore {
   id: string;
 }
 
-export interface IRunStatusResponseDataDataset {
-  label: string;
-  data: number[];
-  borderColor: string;
-  backgroundColor: string;
-}
-
 export interface IRunStatusResponseDataChart {
-  labels: string[];
-  datasets: IRunStatusResponseDataDataset[];
+  dataset: (string | number)[][];
 }
 
 export enum IRunStatusProgressResponseDataEnum {

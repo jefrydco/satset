@@ -11,27 +11,26 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.10.15",
-    "@mui/lab": "5.0.0-alpha.109",
-    "@mui/material": "^5.10.15",
-    "@tanstack/react-query": "^4.16.1",
-    "chart.js": "^4.0.1",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/lab": "5.0.0-alpha.114",
+    "@mui/material": "^5.11.2",
+    "@tanstack/react-query": "^4.20.4",
     "dot-prop": "^7.2.0",
-    "ky": "^0.32.2",
+    "echarts": "^5.4.1",
+    "ky": "^0.33.1",
     "ky-universal": "^0.11.0",
-    "next": "latest",
+    "next": "^13.1.1",
     "react": "^18.2.0",
-    "react-chartjs-2": "^5.0.1",
     "react-dom": "^18.2.0",
     "ui": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^17.0.12",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
-    "eslint": "7.32.0",
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.10",
+    "eslint": "8.30.0",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.3"
+    "typescript": "^4.9.4"
   }
 }

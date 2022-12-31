@@ -53,41 +53,28 @@ export class ApiController extends ConsoleLogger {
         exists: true,
         ...measureDocument,
         chart: {
-          labels: Array.from(
-            { length: measureDocument.scores.length },
-            (_, k) => `Test ${k}`,
-          ),
-          datasets: [
-            {
-              label: 'Performance',
-              data: this.getCategories(measureDocument, 'performance'),
-              borderColor: 'rgb(229, 57, 53)',
-              backgroundColor: 'rgba(229, 57, 53, 0.5)',
-            },
-            {
-              label: 'Accessibility',
-              data: this.getCategories(measureDocument, 'accessibility'),
-              borderColor: 'rgb(145, 184, 89)',
-              backgroundColor: 'rgba(145, 184, 89, 0.5)',
-            },
-            {
-              label: 'Best Practice',
-              data: this.getCategories(measureDocument, 'bestPractices'),
-              borderColor: 'rgb(57, 173, 181)',
-              backgroundColor: 'rgba(57, 173, 181, 0.5)',
-            },
-            {
-              label: 'SEO',
-              data: this.getCategories(measureDocument, 'seo'),
-              borderColor: 'rgb(246, 164, 52)',
-              backgroundColor: 'rgba(246, 164, 52, 0.5)',
-            },
-            {
-              label: 'PWA',
-              data: this.getCategories(measureDocument, 'pwa'),
-              borderColor: 'rgb(124, 77, 255)',
-              backgroundColor: 'rgba(124, 77, 255, 0.5)',
-            },
+          dataset: [
+            [
+              'Test',
+              ...Array.from(
+                { length: measureDocument.scores.length },
+                (_, k) => `Test ${k}`,
+              ),
+            ],
+            [
+              'Performance',
+              ...this.getCategories(measureDocument, 'performance'),
+            ],
+            [
+              'Accessibility',
+              ...this.getCategories(measureDocument, 'accessibility'),
+            ],
+            [
+              'Best Practice',
+              ...this.getCategories(measureDocument, 'bestPractices'),
+            ],
+            ['SEO', ...this.getCategories(measureDocument, 'seo')],
+            ['PWA', ...this.getCategories(measureDocument, 'pwa')],
           ],
         },
       };

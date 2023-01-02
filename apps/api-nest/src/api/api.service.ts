@@ -39,7 +39,7 @@ export class ApiService extends ConsoleLogger {
     this.log(`${this.storeMeasure.name} ${FunctionExecutionStateEnum.START}`);
     try {
       const createdMeasure = new this.measureModel({
-        name: runRequestPayloadDto.name,
+        measureName: runRequestPayloadDto.name,
         scores: [],
       });
       return createdMeasure.save();

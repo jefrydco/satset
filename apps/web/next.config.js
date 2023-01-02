@@ -7,7 +7,7 @@ const path = require("path");
 module.exports = {
   reactStrictMode: true,
   output: "standalone",
-  transpilePackages: ["ui", "echarts", "zrender"],
+  transpilePackages: ["@satset/ui", "@satset/constant", "echarts", "zrender"],
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../"),
   },

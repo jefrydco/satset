@@ -23,6 +23,9 @@ export class Score {
   jobId: string;
 
   @Prop()
+  scoreName: string;
+
+  @Prop()
   performance: number;
 
   @Prop()
@@ -45,7 +48,7 @@ export const ScoreSchema = SchemaFactory.createForClass(Score);
 @Schema(defaultSchemaOptions)
 export class Measure {
   @Prop()
-  name: string;
+  measureName: string;
 
   @Prop()
   runJobId: string;

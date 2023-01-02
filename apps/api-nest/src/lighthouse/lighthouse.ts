@@ -50,6 +50,7 @@ export class Lighthouse extends ConsoleLogger {
       this.log(score);
       const createdScore = new this.scoreModel({
         ...score,
+        scoreName: `Test ${job.data.index}`,
         jobId: job.id,
       });
       return createdScore.save();

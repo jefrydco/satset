@@ -1,0 +1,26 @@
+{
+  "name": "@satset/constant",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "lint": "TIMING=1 eslint \"**/*.ts*\"",
+    "build": "rollup -c rollup.config.mjs"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@satset/eslint-config-custom": "workspace:*",
+    "@satset/tsconfig": "workspace:*",
+    "esbuild": "^0.16.12",
+    "eslint": "^8.30.0",
+    "react": "^18.2.0",
+    "rollup": "^3.9.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "rollup-plugin-dts": "^5.1.0"
+  }
+}

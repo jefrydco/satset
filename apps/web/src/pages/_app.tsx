@@ -3,6 +3,7 @@ import { createTheme, CssBaseline } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
+import Head from "next/head";
 import { ReactElement, ReactNode } from "react";
 import ResponsiveAppBar from "../components/AppBar/AppBar";
 
@@ -16,21 +17,26 @@ const darkTheme = createTheme({
 });
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
+  Component: NextPageWithLayout;
+};
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <ResponsiveAppBar />
-        <Component {...pageProps} />
-      </QueryClientProvider>
-    </ThemeProvider>
+    <>
+      <Head>
+        <title>SatSet</title>
+      </Head>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <QueryClientProvider client={queryClient}>
+          <ResponsiveAppBar />
+          <Component {...pageProps} />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </>
   );
 }

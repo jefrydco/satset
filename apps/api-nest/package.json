@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "dev": "nest start",
+    "dev": "nest start --watch",
     "dev:dev": "nest start --watch",
     "dev:debug": "nest start --debug --watch",
     "dev:prod": "node dist/main",
@@ -21,6 +21,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fastify/csrf-protection": "^6.1.0",
+    "@fastify/helmet": "^10.1.0",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/common": "^9.2.1",
     "@nestjs/core": "^9.2.1",
@@ -39,7 +41,8 @@
     "puppeteer": "^19.4.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.0",
+    "@satset/constant": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.8",

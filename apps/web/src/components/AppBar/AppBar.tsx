@@ -11,14 +11,19 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { SvgIcon } from "@mui/material";
 import { CgPushChevronUp } from "react-icons/cg";
+import { ArrayElement } from "../../types";
+import { useRouter } from "next/router";
 
-const pages = ["Measure", "Compare"];
+const pages = [
+  { label: "Measure", path: "/" },
+  { label: "Compare", path: "/compare" },
+];
 const settings = ["Logout"];
 
 function ResponsiveAppBar() {
+  const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -34,8 +39,11 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    alert("wew");
     setAnchorElNav(null);
+  };
+
+  const handlePageItemClick = (page: ArrayElement<typeof pages>) => {
+    router.push(page.path);
   };
 
   const handleCloseUserMenu = () => {
@@ -97,8 +105,11 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.path}
+                  onClick={() => handlePageItemClick(page)}
+                >
+                  <Typography textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -127,16 +138,16 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.path}
+                onClick={() => handlePageItemClick(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.label}
               </Button>
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -164,7 +175,7 @@ function ResponsiveAppBar() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

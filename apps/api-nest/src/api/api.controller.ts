@@ -1,4 +1,4 @@
-import { Body, ConsoleLogger, Controller, Post } from '@nestjs/common';
+import { Body, ConsoleLogger, Controller, Post, Version } from '@nestjs/common';
 import { FlattenMaps, LeanDocument } from 'mongoose';
 import { FunctionExecutionStateEnum } from 'src/app.enum';
 import { Measure, Score } from 'src/lighthouse/lighthouse.schema';
@@ -11,7 +11,8 @@ export class ApiController extends ConsoleLogger {
     super(ApiController.name);
   }
 
-  @Post('v1/run')
+  @Version('1')
+  @Post('run')
   async run(@Body() runRequestPayloadDto: RunRequestPayloadDto) {
     this.log(`${this.run.name} ${FunctionExecutionStateEnum.START}`);
     const createdMeasure = await this.apiService.storeMeasure(
@@ -41,7 +42,8 @@ export class ApiController extends ConsoleLogger {
     return measureDocument?.scores.map((score) => score[key]);
   }
 
-  @Post('v1/run/status')
+  @Version('1')
+  @Post('run/status')
   async runStatus(
     @Body() runStatusRequestPayloadDto: RunStatusRequestPayloadDto,
   ) {
@@ -54,13 +56,7 @@ export class ApiController extends ConsoleLogger {
         ...measureDocument,
         chart: {
           dataset: [
-            [
-              'Test',
-              ...Array.from(
-                { length: measureDocument.scores.length },
-                (_, k) => `Test ${k}`,
-              ),
-            ],
+            ['Test', ...this.getCategories(measureDocument, 'scoreName')],
             [
               'Performance',
               ...this.getCategories(measureDocument, 'performance'),

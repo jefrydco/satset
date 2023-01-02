@@ -1,3 +1,6 @@
+export type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+
 export interface IRunStatusResponseDataScore {
   jobId: string;
   performance: number;
@@ -13,9 +16,9 @@ export interface IRunStatusResponseDataChart {
 }
 
 export enum IRunStatusProgressResponseDataEnum {
-  INIT = 'INIT',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED'
+  INIT = "INIT",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
 }
 
 export interface IRunStatusResponseData {
@@ -43,10 +46,10 @@ export interface IRunRequestPayload {
 }
 
 export interface IRunStatusRequestPayload {
-  measureMongoId: string
+  measureMongoId: string;
 }
 
 export interface IRunResponseData {
-  run: boolean
-  measureMongoId: string
+  run: boolean;
+  measureMongoId: string;
 }

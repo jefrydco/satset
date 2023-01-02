@@ -1,8 +1,8 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { ApiController } from './api.controller';
-import { ApiService } from './api.service';
-import { Api } from './api';
+import { RunController } from './run.controller';
+import { RunService } from './run.service';
+import { Run } from './run';
 import { QueueNameEnum } from 'src/app.enum';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -15,7 +15,7 @@ import {
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: QueueNameEnum.API,
+      name: QueueNameEnum.RUN,
     }),
     BullModule.registerQueue({
       name: QueueNameEnum.BROWSER,
@@ -26,7 +26,7 @@ import {
     MongooseModule.forFeature([{ name: Measure.name, schema: MeasureSchema }]),
     MongooseModule.forFeature([{ name: Score.name, schema: ScoreSchema }]),
   ],
-  controllers: [ApiController],
-  providers: [ApiService, Api],
+  controllers: [RunController],
+  providers: [RunService, Run],
 })
-export class ApiModule {}
+export class RunModule {}

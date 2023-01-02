@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 
 const defaultSchemaOptions: SchemaOptions = {
+  timestamps: true,
   toJSON: {
     transform(doc, ret) {
       ret.id = ret._id;
@@ -64,6 +65,12 @@ export class Measure {
     type: [{ type: MongooseSchema.Types.ObjectId, ref: Score.name }],
   })
   scores: Score[];
+
+  @Prop()
+  startAt: Date;
+
+  @Prop()
+  endAt: Date;
 }
 
 export type MeasureDocument = HydratedDocument<Measure>;

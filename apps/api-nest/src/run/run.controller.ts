@@ -2,24 +2,28 @@ import { Body, ConsoleLogger, Controller, Post, Version } from '@nestjs/common';
 import { FlattenMaps, LeanDocument } from 'mongoose';
 import { FunctionExecutionStateEnum } from 'src/app.enum';
 import { Measure, Score } from 'src/lighthouse/lighthouse.schema';
-import { RunRequestPayloadDto, RunStatusRequestPayloadDto } from './api.dto';
-import { ApiService } from './api.service';
+import {
+  RunListRequestPayloadDto,
+  RunRequestPayloadDto,
+  RunStatusRequestPayloadDto,
+} from './run.dto';
+import { RunService } from './run.service';
 
-@Controller('api')
-export class ApiController extends ConsoleLogger {
-  constructor(private readonly apiService: ApiService) {
-    super(ApiController.name);
+@Controller('run')
+export class RunController extends ConsoleLogger {
+  constructor(private readonly runService: RunService) {
+    super(RunController.name);
   }
 
   @Version('1')
-  @Post('run')
+  @Post('')
   async run(@Body() runRequestPayloadDto: RunRequestPayloadDto) {
     this.log(`${this.run.name} ${FunctionExecutionStateEnum.START}`);
-    const createdMeasure = await this.apiService.storeMeasure(
+    const createdMeasure = await this.runService.storeMeasure(
       runRequestPayloadDto,
     );
     if (createdMeasure) {
-      await this.apiService.publishRun({
+      await this.runService.publishRun({
         ...runRequestPayloadDto,
         measureMongoId: createdMeasure.id,
       });
@@ -43,11 +47,11 @@ export class ApiController extends ConsoleLogger {
   }
 
   @Version('1')
-  @Post('run/status')
+  @Post('status')
   async runStatus(
     @Body() runStatusRequestPayloadDto: RunStatusRequestPayloadDto,
   ) {
-    const measureDocument = await this.apiService.getMeasure(
+    const measureDocument = await this.runService.getMeasure(
       runStatusRequestPayloadDto,
     );
     if (measureDocument) {
@@ -77,6 +81,17 @@ export class ApiController extends ConsoleLogger {
     }
     return {
       exists: false,
+    };
+  }
+
+  @Version('1')
+  @Post('list')
+  async runList(@Body() runListRequestPayloadDto: RunListRequestPayloadDto) {
+    const measures = await this.runService.getMeasures(
+      runListRequestPayloadDto,
+    );
+    return {
+      measures: measures?.measureDocuments || [],
     };
   }
 }

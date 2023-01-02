@@ -23,12 +23,14 @@
   "dependencies": {
     "@fastify/csrf-protection": "^6.1.0",
     "@fastify/helmet": "^10.1.0",
+    "@forlagshuset/nestjs-mongoose-paginate": "^1.2.6",
     "@nestjs/bull": "^0.6.2",
     "@nestjs/common": "^9.2.1",
     "@nestjs/core": "^9.2.1",
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/platform-express": "^9.2.1",
     "@nestjs/platform-fastify": "^9.2.1",
+    "@satset/constant": "workspace:*",
     "@types/fs-extra": "^9.0.13",
     "bull": "^4.10.2",
     "camelcase": "^6.3.0",
@@ -41,8 +43,7 @@
     "puppeteer": "^19.4.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.8.0",
-    "@satset/constant": "workspace:*"
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.8",

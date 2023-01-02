@@ -1,5 +1,5 @@
 export enum QueueNameEnum {
-  API = 'API',
+  RUN = 'RUN',
   BROWSER = 'BROWSER',
   LIGHTHOUSE = 'LIGHTHOUSE',
   STATUS = 'STATUS',

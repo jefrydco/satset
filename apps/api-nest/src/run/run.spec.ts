@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Api } from './api';
+import { Api } from './run';
 
 describe('Api', () => {
   let provider: Api;

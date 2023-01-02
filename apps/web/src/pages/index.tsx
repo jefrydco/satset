@@ -283,7 +283,7 @@ export default function Measure() {
         <Grid2 lg={6} md={12} sm={12} xs={12}>
           {runStatusResponseData ? (
             <Chart
-              dataSource={runStatusResponseData.chart.dataset}
+              dataSource={runStatusResponseData?.chart?.dataset ?? []}
               series={[
                 {
                   type: "line",

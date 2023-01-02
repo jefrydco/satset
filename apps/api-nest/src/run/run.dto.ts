@@ -1,16 +1,26 @@
 import {
   IsBoolean,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
+  IsNumberString,
 } from 'class-validator';
 
 export class RunStatusRequestPayloadDto {
   @IsNotEmpty()
   @IsString()
   measureMongoId: string;
+}
+
+export class RunListRequestPayloadDto {
+  @IsOptional()
+  @IsNumberString()
+  page?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  limit?: string;
 }
 
 export class RunRequestPayloadDto {

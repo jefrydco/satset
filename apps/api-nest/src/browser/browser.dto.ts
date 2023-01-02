@@ -1,3 +1,3 @@
-import { PublishRunPayloadDto } from 'src/api/api.dto';
+import { PublishRunPayloadDto } from 'src/run/run.dto';
 
 export class LoginDto extends PublishRunPayloadDto {}

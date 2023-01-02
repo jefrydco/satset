@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LighthouseModule } from './lighthouse/lighthouse.module';
 import { BrowserModule } from './browser/browser.module';
-import { ApiModule } from './api/api.module';
+import { RunModule } from './run/run.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
@@ -20,7 +20,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     LighthouseModule,
     BrowserModule,
-    ApiModule,
+    RunModule,
   ],
   controllers: [AppController],
   providers: [AppService],

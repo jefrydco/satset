@@ -18,11 +18,12 @@ import { useRouter } from "next/router";
 
 const pages = [
   { label: "Measure", path: "/" },
+  { label: "List", path: "/list" },
   { label: "Compare", path: "/compare" },
 ];
 const settings = ["Logout"];
 
-function ResponsiveAppBar() {
+const ResponsiveAppBar: React.FC = () => {
   const router = useRouter();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null

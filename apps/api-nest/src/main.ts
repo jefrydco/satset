@@ -22,6 +22,7 @@ async function bootstrap() {
     type: VersioningType.HEADER,
     header: HEADER_APP_VERSION_KEY,
   });
+  app.setGlobalPrefix('api');
   await app.register(helmet);
   await app.register(fastifyCsrf);
   await app.listen(3001, '0.0.0.0');
